@@ -16,4 +16,4 @@ const whiteboardSlice = createSlice({
 
 export const { setToolType } = whiteboardSlice.actions;
 
-export default whiteboardSlice;
+export default whiteboardSlice.reducer;
