@@ -34,7 +34,7 @@ body {
 	background: #e8d5c4;
 }
 
-.menu_button:active {
+.menu_button_active {
 	width: 40px;
 	height: 40px;
 	border-radius: 8px;

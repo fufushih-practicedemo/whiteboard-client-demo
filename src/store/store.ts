@@ -1,10 +1,17 @@
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
-import whiteboardSlice from "./whiteboard.slice";
+import whiteboardSlice from "../components/Whiteboard/Whiteboard.slice";
 
 export const store = configureStore({
 	reducer: {
 		whiteboard: whiteboardSlice,
 	},
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: ["whiteboard/setElements"],
+				ignorePath: ["whiteboard.elements"],
+			},
+		}),
 });
 
 export type AppDispatch = typeof store.dispatch;
