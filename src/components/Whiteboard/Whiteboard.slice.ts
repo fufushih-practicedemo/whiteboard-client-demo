@@ -1,8 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { WhiteboardElement } from "./Whiteboard-types";
 
 const initialState: {
-	tool: any;
-	elements: any[];
+	tool: string | null;
+	elements: WhiteboardElement[];
 } = {
 	tool: null,
 	elements: [],
@@ -12,10 +13,10 @@ const whiteboardSlice = createSlice({
 	name: "whiteboard",
 	initialState,
 	reducers: {
-		setToolType: (state, action) => {
+		setToolType: (state, action: PayloadAction<string>) => {
 			state.tool = action.payload;
 		},
-		updateElement: (state, action) => {
+		updateElement: (state, action: PayloadAction<WhiteboardElement>) => {
 			const { id } = action.payload;
 
 			const index = state.elements.findIndex((element) => element.id === id);
@@ -27,7 +28,7 @@ const whiteboardSlice = createSlice({
 				// update element in our array of elements
 			}
 		},
-		setElements: (state, action) => {
+		setElements: (state, action: PayloadAction<WhiteboardElement[]>) => {
 			state.elements = action.payload;
 		},
 	},

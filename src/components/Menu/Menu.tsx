@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { toolTypes } from "../../constants";
 import rectangeIcon from "../../resources/icons/rectangle.svg";
 import { setToolType } from "../Whiteboard/Whiteboard.slice";
+import { RootState } from "../../store";
 
 const IconButton = ({ src, type }: { src: string; type: string }) => {
 	const dispatch = useDispatch();
 
-	const selectedToolType = useSelector((state: any) => state.whiteboard.tool);
+	const selectedToolType = useSelector((state: RootState) => state.whiteboard.tool);
 
 	const handleToolChange = () => {
 		dispatch(setToolType(type));

@@ -6,16 +6,18 @@ import { actions, toolTypes } from "../../constants";
 import { adjustElementCoordinates, adjustmentRequired, createElement, drawElement, updateElement } from "../../utils";
 import Menu from "../Menu";
 import { updateElement as updateElementInStore } from "./Whiteboard.slice";
+import { RootState } from "../../store/store";
+import { WhiteboardElement } from "./Whiteboard-types";
 
-let selectedElement: any;
-const setSelectedElement = (element: any) => {
+let selectedElement: WhiteboardElement | null;
+const setSelectedElement = (element: WhiteboardElement | null) => {
 	selectedElement = element;
 };
 
 const Whiteboard = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
-	const toolType = useSelector((state: any) => state.whiteboard.tool);
-	const elements = useSelector((state: any) => state.whiteboard.elements);
+	const toolType = useSelector((state: RootState) => state.whiteboard.tool);
+	const elements = useSelector((state: RootState) => state.whiteboard.elements);
 
 	const [action, setAction] = React.useState<string | null>(null);
 
@@ -31,13 +33,13 @@ const Whiteboard = () => {
 
 			const roughCanvas = rough.canvas(canvas);
 
-			elements.forEach((element: any) => {
+			elements.forEach((element: WhiteboardElement) => {
 				drawElement({ roughCanvas, context: ctx, element });
 			});
 		}
 	}, [elements]);
 
-	const handleMouseDown = (event: any) => {
+	const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
 		const { clientX, clientY } = event;
 
 		if (toolType === toolTypes.RECTANGLE) {
@@ -59,7 +61,7 @@ const Whiteboard = () => {
 	};
 
 	const handleMouseUp = () => {
-		const selectedElementIndex = elements.findIndex((el: any) => el.id === selectedElement.id);
+		const selectedElementIndex = elements.findIndex((el: WhiteboardElement) => el.id === selectedElement?.id);
 
 		if (selectedElementIndex !== -1) {
 			if (action === actions.DRAWING) {
@@ -68,7 +70,7 @@ const Whiteboard = () => {
 
 					updateElement(
 						{
-							id: selectedElement.id,
+							id: selectedElement?.id,
 							index: selectedElementIndex,
 							x1,
 							x2,
@@ -86,11 +88,11 @@ const Whiteboard = () => {
 		setSelectedElement(null);
 	};
 
-	const handleMouseMove = (event: any) => {
+	const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
 		const { clientX, clientY } = event;
 
 		if (action === actions.DRAWING) {
-			const index = elements.findIndex((element: any) => element.id === selectedElement.id);
+			const index = elements.findIndex((element: WhiteboardElement) => element.id === selectedElement?.id);
 
 			if (index !== -1) {
 				updateElement(
