@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toolTypes } from "../../constants";
 import rectangeIcon from "../../resources/icons/rectangle.svg";
+import lineIcon from "../../resources/icons/line.svg";
 import { setToolType } from "../Whiteboard/Whiteboard.slice";
 import { RootState } from "../../store";
 
@@ -25,6 +26,7 @@ const Menu = () => {
 	return (
 		<div className="menu_container">
 			<IconButton src={rectangeIcon} type={toolTypes.RECTANGLE} />
+			<IconButton src={lineIcon} type={toolTypes.LINE} />
 		</div>
 	);
 };
