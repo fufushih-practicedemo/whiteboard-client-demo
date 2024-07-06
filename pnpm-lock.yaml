@@ -17,6 +17,7 @@ specifiers:
   eslint-plugin-react: ^7.33.2
   husky: 8.0.3
   lint-staged: ^15.2.1
+  perfect-freehand: ^1.2.2
   prettier: 2.8.8
   react: ^18.0.0
   react-dom: ^18.0.0
@@ -29,6 +30,7 @@ specifiers:
 
 dependencies:
   '@reduxjs/toolkit': 1.9.7_reiadaay42xu3uk4bvhmtbk5mu
+  perfect-freehand: 1.2.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-redux: 8.1.3_ycf32way2mvvxbgmthxbkkb23e
@@ -3271,6 +3273,10 @@ packages:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
     engines: {node: '>=8'}
     dev: true
+
+  /perfect-freehand/1.2.2:
+    resolution: {integrity: sha512-eh31l019WICQ03pkF3FSzHxB8n07ItqIQ++G5UV8JX0zVOXzgTGCqnRR0jJ2h9U8/2uW4W4mtGJELt9kEV0CFQ==}
+    dev: false
 
   /picocolors/1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==}

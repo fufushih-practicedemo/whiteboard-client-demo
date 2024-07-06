@@ -42,7 +42,7 @@ const Whiteboard = () => {
 	const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
 		const { clientX, clientY } = event;
 
-		if (toolType === toolTypes.RECTANGLE || toolType === toolTypes.LINE) {
+		if (toolType === toolTypes.RECTANGLE || toolType === toolTypes.LINE || toolType === toolTypes.PENCIL) {
 			setAction(actions.DRAWING);
 
 			const element = createElement({
