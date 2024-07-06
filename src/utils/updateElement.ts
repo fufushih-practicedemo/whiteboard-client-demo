@@ -1,6 +1,7 @@
 import { createElement } from ".";
 import { setElements } from "../components/Whiteboard/Whiteboard.slice";
 import { toolTypes } from "../constants";
+import { emitElementUpdate } from "../socketConn/socketConn";
 import { store } from "../store/store";
 
 export const updateElement = ({ id, x1, x2, y1, y2, type, index }: any, elements: any[]) => {
@@ -20,6 +21,7 @@ export const updateElement = ({ id, x1, x2, y1, y2, type, index }: any, elements
 			elementsCopy[index] = updateElement;
 
 			store.dispatch(setElements(elementsCopy));
+			emitElementUpdate(updateElement);
 			break;
 		}
 		default:
