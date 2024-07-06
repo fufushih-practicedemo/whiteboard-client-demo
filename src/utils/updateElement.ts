@@ -4,7 +4,7 @@ import { toolTypes } from "../constants";
 import { emitElementUpdate } from "../socketConn/socketConn";
 import { store } from "../store/store";
 
-export const updateElement = ({ id, x1, x2, y1, y2, type, index }: any, elements: any[]) => {
+export const updateElement = ({ id, x1, x2, y1, y2, type, text, index }: any, elements: any[]) => {
 	const elementsCopy = [...elements];
 
 	switch (type) {
@@ -42,6 +42,30 @@ export const updateElement = ({ id, x1, x2, y1, y2, type, index }: any, elements
 			store.dispatch(setElements(elementsCopy));
 
 			emitElementUpdate(updatedPencilElement);
+			break;
+		}
+		case toolTypes.TEXT: {
+			const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+			const textWidth = canvas.getContext("2d")!.measureText(text).width;
+
+			const textHeight = 24;
+
+			elementsCopy[index] = {
+				...createElement({
+					id,
+					x1,
+					y1,
+					x2: x1 + textWidth,
+					y2: y1 + textHeight,
+					toolType: type,
+					text,
+				}),
+			};
+			const updatedTextElement = elementsCopy[index];
+
+			store.dispatch(setElements(elementsCopy));
+
+			emitElementUpdate(updatedTextElement);
 			break;
 		}
 		default:

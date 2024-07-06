@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { TextareaHTMLAttributes, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import rough from "roughjs";
 import { v4 as uuid } from "uuid";
@@ -9,17 +9,15 @@ import { updateElement as updateElementInStore } from "./Whiteboard.slice";
 import { RootState } from "../../store/store";
 import { WhiteboardElement } from "./Whiteboard-types";
 
-let selectedElement: WhiteboardElement | null;
-const setSelectedElement = (element: WhiteboardElement | null) => {
-	selectedElement = element;
-};
-
 const Whiteboard = () => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
 	const toolType = useSelector((state: RootState) => state.whiteboard.tool);
 	const elements = useSelector((state: RootState) => state.whiteboard.elements);
 
 	const [action, setAction] = React.useState<string | null>(null);
+	const [selectedElement, setSelectedElement] = useState<any>(null);
 
 	const dispatch = useDispatch();
 
@@ -42,22 +40,35 @@ const Whiteboard = () => {
 	const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
 		const { clientX, clientY } = event;
 
-		if (toolType === toolTypes.RECTANGLE || toolType === toolTypes.LINE || toolType === toolTypes.PENCIL) {
-			setAction(actions.DRAWING);
-
-			const element = createElement({
-				x1: clientX,
-				y1: clientY,
-				x2: clientX,
-				y2: clientY,
-				toolType,
-				id: uuid(),
-			});
-
-			setSelectedElement(element);
-
-			dispatch(updateElementInStore(element));
+		if (selectedElement && action === actions.WRITTING) {
+			return;
 		}
+
+		const element = createElement({
+			x1: clientX,
+			y1: clientY,
+			x2: clientX,
+			y2: clientY,
+			toolType,
+			id: uuid(),
+		});
+
+		switch (toolType) {
+			case toolTypes.RECTANGLE:
+			case toolTypes.LINE:
+			case toolTypes.PENCIL: {
+				setAction(actions.DRAWING);
+				break;
+			}
+			case toolTypes.TEXT: {
+				setAction(actions.WRITTING);
+				break;
+			}
+		}
+
+		setSelectedElement(element);
+
+		dispatch(updateElementInStore(element));
 	};
 
 	const handleMouseUp = () => {
@@ -111,10 +122,43 @@ const Whiteboard = () => {
 		}
 	};
 
+	const handleTextareaBlur: TextareaHTMLAttributes<HTMLTextAreaElement>["onBlur"] = (event) => {
+		const { id, x1, y1, type } = selectedElement;
+
+		const index = elements.findIndex((el) => el.id === selectedElement.id);
+
+		if (index !== -1) {
+			updateElement({ id, x1, y1, type, text: event.target.value, index }, elements);
+
+			setAction(null);
+			setSelectedElement(null);
+		}
+	};
+
 	return (
 		<>
 			<Menu />
+			{action === actions.WRITTING ? (
+				<textarea
+					ref={textAreaRef}
+					onBlur={handleTextareaBlur}
+					style={{
+						position: "absolute",
+						top: selectedElement.y1 - 3,
+						left: selectedElement.x1,
+						font: "24px sans-serif",
+						margin: 0,
+						padding: 0,
+						border: 0,
+						outline: 0,
+						overflow: "hidden",
+						whiteSpace: "pre",
+						background: "transparent",
+					}}
+				/>
+			) : null}
 			<canvas
+				id="canvas"
 				onMouseDown={handleMouseDown}
 				onMouseUp={handleMouseUp}
 				onMouseMove={handleMouseMove}
