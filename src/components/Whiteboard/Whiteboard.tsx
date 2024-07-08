@@ -10,6 +10,7 @@ import {
 	drawElement,
 	getCursorForPosition,
 	getElementAtPosition,
+	getResizedCoordinates,
 	updateElement,
 } from "../../utils";
 import Menu from "../Menu";
@@ -105,7 +106,7 @@ const Whiteboard = () => {
 		const selectedElementIndex = elements.findIndex((el: WhiteboardElement) => el.id === selectedElement?.id);
 
 		if (selectedElementIndex !== -1) {
-			if (action === actions.DRAWING) {
+			if (action === actions.DRAWING || action === actions.RESIZING) {
 				if (adjustmentRequired(elements[selectedElementIndex].type)) {
 					const { x1, y1, x2, y2 } = adjustElementCoordinates(elements[selectedElementIndex]);
 
@@ -182,6 +183,33 @@ const Whiteboard = () => {
 					},
 					elements,
 				);
+			}
+		}
+
+		if (toolType === toolTypes.SELECTION && action === actions.RESIZING && selectedElement) {
+			const { id, type, position, ...coordinates } = selectedElement;
+			const resizedCoordinates = getResizedCoordinates(clientX, clientY, position, coordinates);
+
+			if (resizedCoordinates) {
+				const { x1, x2, y1, y2 } = resizedCoordinates;
+				const selectedElementIndex = elements.findIndex((el) => el.id === selectedElement.id);
+
+				if (selectedElement !== -1) {
+					updateElement(
+						{
+							x1,
+							x2,
+							y1,
+							y2,
+							type: selectedElement.type,
+							id: selectedElement.id,
+							index: selectedElementIndex,
+						},
+						elements,
+					);
+				}
+			} else {
+				console.error("Unable to resize element: invalid coordinates");
 			}
 		}
 	};
