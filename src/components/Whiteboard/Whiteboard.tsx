@@ -89,7 +89,10 @@ const Whiteboard = () => {
 			case toolTypes.SELECTION: {
 				const element = getElementAtPosition(clientX, clientY, elements);
 
-				if (element && (element.type === toolTypes.RECTANGLE || element.type === toolTypes.TEXT)) {
+				if (
+					element &&
+					(element.type === toolTypes.RECTANGLE || element.type === toolTypes.TEXT || element.type === toolTypes.LINE)
+				) {
 					setAction(element.position === cursorPosition.INSIDE ? actions.MOVING : actions.RESIZING);
 
 					const offsetX = clientX - element.x1;
