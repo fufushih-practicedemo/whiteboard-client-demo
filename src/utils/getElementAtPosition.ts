@@ -16,8 +16,9 @@ const positionWithElement = (x: number, y: number, element: any) => {
 			const inside = x >= x1 && x <= x2 && y >= y1 && y <= y2 ? cursorPosition.INSIDE : null;
 			return topLeft || topRight || bottomLeft || bottomRight || inside;
 		}
-		case toolTypes.LINE:
-			break;
+		case toolTypes.TEXT: {
+			return x >= x1 && x <= x2 && y >= y1 && y <= y2 ? cursorPosition.INSIDE : null;
+		}
 		default:
 			break;
 	}
